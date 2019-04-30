@@ -1,0 +1,10 @@
+---
+# file: defaults/main.yml
+
+bootstrap_timezone_name: UTC
+bootstrap_ntpdate_servers: "pool.ntp.org"
+bootstrap_yum_update_cache: True
+bootstrap_yum_update_all: True
+bootstrap_install_development_tools: False
+
+...

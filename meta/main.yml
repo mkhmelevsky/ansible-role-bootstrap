@@ -1,0 +1,28 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: "bootstrap"
+  author: "Max Khmelevsky <max.khmelevsky@yandex.ru>"
+  description: Install some basic packages and perform initial configuration for RHEL/CentOS host
+  company: ""
+
+  license: Apache
+
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+    - name: CentOS
+      versions:
+        - 6
+        - 7
+
+
+  galaxy_tags:
+    - bootstrap
+
+  min_ansible_version: 2.4
+
+...

@@ -1,0 +1,23 @@
+---
+# file: tasks/main.yml
+
+- name: Include common variables
+  include_vars: '{{ platform_vars }}'
+  with_first_found:
+    - "common-{{ ansible_distribution }}.yml"
+    - "common-{{ ansible_os_family }}.yml"
+  loop_control:
+    loop_var: platform_vars
+  tags: [ common ]
+
+- name: Install common packages
+  include_tasks: "{{ platform }}"
+  with_first_found:
+    - "setup-{{ ansible_distribution }}.yml"
+    - "setup-{{ ansible_os_family }}.yml"
+    - "not-supported.yml"
+  loop_control:
+    loop_var: platform
+  tags: [ common ]
+
+...

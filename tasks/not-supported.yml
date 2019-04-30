@@ -1,0 +1,9 @@
+---
+# file: tasks/not-supported.yml
+
+- name: Fail if platform is not supported
+  fail:
+    msg: >-
+      "This role doesn't support {{ ansible_distribution }} {{ ansible_distribution_major_version }} platform"
+
+...
