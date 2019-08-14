@@ -14,6 +14,11 @@
       delay: 2
       until: task_result is succeeded
 
+    - name: Ensure that SELinux is enabled
+      selinux:
+        policy: targeted
+        state: enforcing
+
     - name: Update all existing packages to latest version
       yum:
         name: "*"
@@ -34,34 +39,33 @@
       delay: 2
       until: task_result is succeeded
 
-    - name: Install the 'Development tools' package group
+    - name: Install the Docker packages
       yum:
-        name: "@Development tools"
+        name: '{{ bootstrap_redhat_docker_packages }}'
         state: present
         update_cache: "{{ bootstrap_yum_update_cache }}"
-      when: bootstrap_install_development_tools
+      when: bootstrap_install_docker
       register: task_result
       retries: 3
       delay: 2
       until: task_result is succeeded
 
-    - name: Setting Timezone
-      timezone:
-        name: "{{ bootstrap_timezone_name }}"
-      tags: [ timezone ]
+    - name: Determine Virtualization type
+      shell: /usr/bin/hostnamectl | grep -i Virtualization | awk '{ print $2 }'
+      args:
+          executable: /usr/bin/bash
+      register: bootstrap_running_in_vm
+      no_log: True
 
-    - name: Configurating crond for ntpdate
-      cron:
-        name: "ntpdate"
-        minute: "*/5"
-        job: "/usr/sbin/ntpdate {{ bootstrap_ntpdate_servers }}"
-      tags: [ timezone ]
-
-    - name: Enable and restart crond service
-      service:
-        name: crond
-        enabled: True
-        state: restarted
-      tags: [ timezone ]
+    - name: Install open-vm-tools if we are running inside VMware VM
+      yum:
+        name: 'open-vm-tools'
+        state: latest
+        update_cache: "{{ bootstrap_yum_update_cache }}"
+      when: bootstrap_running_in_vm.stdout == "vmware"
+      register: task_result
+      retries: 3
+      delay: 2
+      until: task_result is succeeded
 
 ...

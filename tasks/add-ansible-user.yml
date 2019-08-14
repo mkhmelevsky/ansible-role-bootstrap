@@ -1,0 +1,32 @@
+---
+# Add user for remote administration
+
+- name: Add ansible user account
+  user:
+    append: "{{ bootstrap_ansible_user.append | default(bootstrap_ansible_user_append) }}"
+    comment: "{{ bootstrap_ansible_user.comment | default(omit) }}"
+    createhome: "{{ bootstrap_ansible_user.createhome | default(bootstrap_ansible_user_createhome) }}"
+    groups: "{{ bootstrap_ansible_user.groups|join(',') if bootstrap_ansible_user.groups is defined else omit }}"
+    name: "{{ bootstrap_ansible_user.name }}"
+    password: "{{ bootstrap_ansible_user.password | default(omit) }}"
+    shell: "{{ bootstrap_ansible_user.shell | default(bootstrap_ansible_user_shell) }}"
+    state: "{{ bootstrap_ansible_user.state | default(bootstrap_ansible_user_state) }}"
+    update_password: "{{ bootstrap_ansible_user.update_password | default(bootstrap_ansible_user_update_password) }}"
+
+- name: Set up authorized keys for the ansible user
+  authorized_key:
+    user: "{{ bootstrap_ansible_user.name }}"
+    key: "{{ item }}"
+    state: present
+    manage_dir: True
+  with_items: "{{ bootstrap_ansible_user.ssh_authorized_keys }}"
+
+- name: Allow ansible user to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^{{ bootstrap_ansible_user.name }}"
+    line: "{{ bootstrap_ansible_user.name }} ALL=(ALL) NOPASSWD: ALL"
+    validate: 'visudo -cf %s'
+
+...

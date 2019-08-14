@@ -20,4 +20,13 @@
     loop_var: platform
   tags: [ common ]
 
+- name: Include Date and Time related tasks
+  include_tasks: "datetime.yml"
+
+- name: Add non-privileged user
+  include_tasks: "add-ansible-user.yml"
+
+- name: Include network related tasks
+  include_tasks: "update-networking.yml"
+
 ...

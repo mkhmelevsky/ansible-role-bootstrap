@@ -5,6 +5,24 @@ bootstrap_timezone_name: UTC
 bootstrap_ntpdate_servers: "pool.ntp.org"
 bootstrap_yum_update_cache: True
 bootstrap_yum_update_all: True
-bootstrap_install_development_tools: False
+bootstrap_install_docker: False
+
+bootstrap_ansible_user:
+  name: "ansible"
+  password: ""
+  ssh_authorized_keys: []
+  comment: "Auto-generated user account"
+  state: present
+
+bootstrap_ansible_user_append: True
+bootstrap_ansible_user_createhome: True
+bootstrap_ansible_user_shell: /usr/bin/bash
+bootstrap_ansible_user_state: absent
+bootstrap_ansible_user_update_password: always
+
+bootstrap_hostname: "localhost"
+bootstrap_dns_server: "8.8.8.8"
+bootstrap_domain: "example.com"
+bootstrap_interface: "eth0"
 
 ...

@@ -1,0 +1,2 @@
+[all]
+centos7 ansible_host=192.168.162.133 ansible_user=root bootstrap_interface=ens33 bootstrap_hostname=centos7

@@ -1,0 +1,28 @@
+---
+- name: Update network parameters
+  become: True
+  block:
+    - name: Set hostname
+      hostname:
+        name: "{{ bootstrap_hostname }}"
+
+    - name: Make the hostname permanent
+      shell: 'echo "{{ bootstrap_hostname }}" > /etc/hostname'
+
+    - name: Set ignore-auto-dns to True
+      shell: "nmcli con mod {{ bootstrap_interface }} ipv4.ignore-auto-dns yes"
+
+    - name: Set up network preferences
+      nmcli:
+        type: ethernet
+        conn_name: '{{ bootstrap_interface }}'
+        dns4_search: "{{ bootstrap_domain }}"
+        dns4: "{{ bootstrap_dns_server }}"
+        state: present
+
+    - name: Restart network service
+      service:
+        name: network
+        state: restarted
+
+...

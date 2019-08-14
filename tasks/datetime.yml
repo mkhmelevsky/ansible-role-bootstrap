@@ -1,0 +1,22 @@
+---
+# Date and Time related tasks
+
+- name: Setting Timezone
+  timezone:
+    name: "{{ bootstrap_timezone_name }}"
+  tags: [ timezone ]
+
+- name: Syncronize date and time with NTP-servers
+  shell: "/usr/sbin/ntpdate {{ bootstrap_ntpdate_servers }}"
+  args:
+    executable: "/bin/bash"
+  tags: [ timezone ]
+
+- name: Enable and restart chrony service
+  service:
+    name: chronyd
+    enabled: True
+    state: restarted
+  tags: [ timezone ]
+
+...

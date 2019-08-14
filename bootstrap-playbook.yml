@@ -1,0 +1,23 @@
+---
+# Sample playbook for ansible-role-bootstrap
+
+#
+# Command to generate encrypted password
+# ansible all -i localhost, -m debug -a "msg={{ 'password' | password_hash('sha512', 'salt') }}"
+#
+
+
+- name: Apply role ansible-role-bootstrap to every host in group 'all'
+  hosts: all
+  become: True
+  vars:
+    bootstrap_ansible_user:
+      name: "user"
+      password: "$6$salt$IxDD3jeSOb5eB1CX5LBsqZFVkJdido3OUILO5Ifz5iwMuTS4XMS130MTSuDDl3aCI6WouIL9AjRbLCelDCy.g."
+      ssh_authorized_keys:
+        - "ssh-rsa public key here"
+      comment: "Account for remote administration"
+      state: present
+
+  roles:
+    - role: ansible-role-bootstrap
