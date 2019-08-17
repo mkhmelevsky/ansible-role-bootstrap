@@ -68,4 +68,15 @@
       delay: 2
       until: task_result is succeeded
 
+    - name: Install qemu-guest-agent if we are running inside KVM
+      yum:
+        name: 'qemu-guest-agent'
+        state: latest
+        update_cache: "{{ bootstrap_yum_update_cache }}"
+      when: bootstrap_running_in_vm.stdout == "kvm"
+      register: task_result
+      retries: 3
+      delay: 2
+      until: task_result is succeeded
+
 ...

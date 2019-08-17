@@ -21,7 +21,7 @@
     manage_dir: True
   with_items: "{{ bootstrap_ansible_user.ssh_authorized_keys }}"
 
-- name: Allow ansible user to have passwordless sudo
+- name: Allow ansible user to have password-less sudo
   lineinfile:
     dest: /etc/sudoers
     state: present
